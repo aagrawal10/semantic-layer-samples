@@ -1,0 +1,34 @@
+semantic_models:
+  - name: mf_orders
+    description: Order facts. One row per order.
+    model: ref('orders')
+    defaults:
+      agg_time_dimension: ordered_at
+    entities:
+      - name: order_id
+        type: primary
+      - name: customer
+        type: foreign
+        expr: customer_id
+    dimensions:
+      - name: ordered_at
+        type: time
+        type_params:
+          time_granularity: day
+      - name: customer_type
+        type: categorical
+    measures:
+      - name: order_total
+        agg: sum
+        description: Order totals including tax.
+      - name: order_subtotal
+        agg: sum
+        expr: subtotal
+        description: Order totals before tax.
+      - name: order_count
+        agg: sum
+        expr: "1"
+      - name: ordering_customers
+        agg: count_distinct
+        expr: customer_id
+        description: Distinct customers who placed an order.

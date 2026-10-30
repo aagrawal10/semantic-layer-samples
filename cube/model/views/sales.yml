@@ -1,0 +1,17 @@
+views:
+  - name: sales
+    title: Sales
+    description: Orders with their customers, for revenue reporting.
+    cubes:
+      - join_path: orders
+        includes:
+          - count
+          - total_amount
+          - revenue_excl_tax
+          - average_order_value
+          - ordered_at
+      - join_path: orders.customers
+        prefix: true
+        includes:
+          - customer_type
+          - count

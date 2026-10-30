@@ -1,0 +1,25 @@
+cubes:
+  - name: customers
+    sql_table: public.customers
+    description: Customers who have placed at least one order.
+
+    measures:
+      - name: count
+        type: count_distinct
+        sql: customer_id
+        description: Distinct customers with at least one order.
+      - name: lifetime_spend
+        type: sum
+        sql: lifetime_spend
+        format: currency
+        description: Total spend across a customer's orders, including tax.
+
+    dimensions:
+      - name: customer_id
+        sql: customer_id
+        type: string
+        primary_key: true
+      - name: customer_type
+        sql: customer_type
+        type: string
+        description: new (one order) or returning (more than one).

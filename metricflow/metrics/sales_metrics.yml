@@ -1,0 +1,26 @@
+metrics:
+  - name: net_revenue
+    label: Net Revenue
+    description: Revenue excluding tax (order subtotals). The company's headline revenue number.
+    type: simple
+    type_params:
+      measure: order_subtotal
+  - name: gross_revenue
+    label: Gross Revenue
+    description: Order totals including tax.
+    type: simple
+    type_params:
+      measure: order_total
+  - name: active_customers
+    label: Active Customers
+    description: Customers who placed at least one order in the period.
+    type: simple
+    type_params:
+      measure: ordering_customers
+  - name: revenue_per_customer
+    label: Revenue per Customer
+    description: Net revenue divided by active customers.
+    type: ratio
+    type_params:
+      numerator: net_revenue
+      denominator: active_customers

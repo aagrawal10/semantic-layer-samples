@@ -1,0 +1,57 @@
+cubes:
+  - name: orders
+    sql_table: public.orders
+    title: Orders
+    description: One row per order placed at a jaffle shop location.
+
+    joins:
+      - name: customers
+        relationship: many_to_one
+        sql: "{CUBE}.customer_id = {customers}.customer_id"
+
+    measures:
+      - name: count
+        type: count
+        title: Orders
+        description: Number of orders.
+      - name: total_amount
+        type: sum
+        sql: order_total
+        format: currency
+        title: Order Total
+        description: Sum of order totals in USD, including tax.
+      - name: revenue_excl_tax
+        type: sum
+        sql: subtotal
+        format: currency
+        description: Order subtotal before tax. This is what finance reports as revenue.
+      - name: average_order_value
+        type: avg
+        sql: order_total
+        format: currency
+        description: Average order total including tax.
+      - name: large_orders
+        type: count
+        filters:
+          - sql: "{CUBE}.order_total >= 20"
+        description: Orders with a total of 20 USD or more.
+
+    dimensions:
+      - name: order_id
+        sql: order_id
+        type: string
+        primary_key: true
+      - name: customer_id
+        sql: customer_id
+        type: string
+      - name: ordered_at
+        sql: ordered_at
+        type: time
+      - name: is_food_order
+        sql: is_food_order
+        type: boolean
+
+    segments:
+      - name: food_orders
+        sql: "{CUBE}.is_food_order"
+        description: Orders containing at least one food item.
